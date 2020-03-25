@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>首頁</title>
+</head>
+<body>
+	<!-- xmlns:th="http://www.thymeleaf.org"為了語法提示 -->
+	<!-- th:text文本內容，轉義，因為會處理掉html code-->
+	<!-- th:utext，不轉義，因為不會處理掉html code -->
+	<!-- th替換html原先任意attribute，只要存在都可以加上th: -->
+	<div th:text="${hello}">沒有取到，轉義，清除html</div>
+	<div th:utext="${hello}">沒有取到，不轉義，不清除html</div>
+	
+	<span th:text="${true}"></span>
+	
+	
+</body>
+</html>

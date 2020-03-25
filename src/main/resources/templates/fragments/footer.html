@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- 編碼 -->
+	<meta charset="UTF-8">
+	
+	<!-- RWD網頁設定 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	
+	<!-- IE兼容模式 -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<!-- 取消快取 -->
+	<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+	
+	<title>footer page</title>
+	
+	<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}">
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+	<!-- 此頁面基本上無法被訪問，沒有相對的請求設定，引入css等等，只是方便之後有天開啟 -->
+
+	<footer class="my-5 pt-5 text-muted text-center text-small" th:fragment="footer(isDashboard)">
+		<p class="mb-1">&copy; 2017-2019 Company Name</p>
+		
+		<script src="webjars/jquery/3.4.0/jquery.slim.min.js" th:src="@{/webjars/jquery/3.4.0/jquery.slim.min.js}"></script>
+		<script src="webjars/bootstrap/4.4.1/js/bootstrap.bundle.min.js" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.bundle.min.js}"></script>
+		<script src="js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+		<script src="js/Chart.min.js" th:src="@{/js/Chart.min.js}" th:if="${not #strings.isEmpty(isDashboard)}"></script>
+		<script src="js/dashboard.js" th:src="@{/js/dashboard.js}" th:if="${not #strings.isEmpty(isDashboard)}"></script>
+	</footer>
+</body>
+</html>

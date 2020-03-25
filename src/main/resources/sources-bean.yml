@@ -1,0 +1,16 @@
+propertysourcebean:
+  name: Reyes
+  age: 18
+  weight: 123.05
+  isP: true
+  bir: 2019/01/02
+  maps: {k1: v1, k2: v2}
+  lists:
+    - A
+    - B
+    - C
+# 行內寫法 lists: [A, B, C]
+  dtl:
+#  yml編碼已為utf-8，因此中字有支援
+    name: 陳
+    age: 4756

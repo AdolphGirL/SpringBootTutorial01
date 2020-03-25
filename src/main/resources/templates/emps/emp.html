@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- 編碼 -->
+	<meta charset="UTF-8">
+	
+	<!-- RWD網頁設定 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	
+	<!-- IE兼容模式 -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<!-- 取消快取 -->
+	<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+	
+	<title>emp page</title>
+	
+	<!-- Favicons -->
+	<link rel="apple-touch-icon" href="img/favicons/apple-touch-icon.png" sizes="180x180">
+	<link rel="icon" href="img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+	<link rel="icon" href="img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+	<link rel="manifest" href="img/favicons/manifest.json">
+	<link rel="mask-icon" href="img/favicons/safari-pinned-tab.svg" color="#563d7c">
+	<link rel="icon" href="img/favicons/favicon.ico">
+	<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+	<meta name="theme-color" content="#563d7c">
+	
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}">
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+	<!-- 
+	故意空格，不然會被解析到
+	[ [ ] ]，轉義，會將htmlcode當成字串
+	[ ( ) ]，不轉義，會將htmlcode當成html
+	 -->
+	<!-- 等同於 th:insert ，目前雖然mark住，但並非thymeleaf註解，因此會拿掉
+	<div>[ ( ~{fragments/nav::#nav} ) ]</div>
+	-->
+	<div th:replace="~{fragments/nav::#nav}"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div th:replace="~{fragments/sidebar::#sidebar(navUri='emps')}"></div>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<form style="margin-top: 3em" th:action="@{/emp}" method="POST">
+					<!--
+					如何發出put請求，form表單只能發出(GET、POST)
+					1. 配置hiddenhttpmethodfilter，spring boot以自動配置完成(WebMvcAutoConfiguration.class)
+						HiddenHttpMethodFilter.class內
+						@Bean
+						@ConditionalOnMissingBean(HiddenHttpMethodFilter.class)
+						@ConditionalOnProperty(prefix = "spring.mvc.hiddenmethod.filter", name = "enabled", matchIfMissing = false)
+						public OrderedHiddenHttpMethodFilter hiddenHttpMethodFilter() {
+							return new OrderedHiddenHttpMethodFilter();
+						}
+					2. 創建post表單
+					3. input hidden輸入框 name="_method"，值寫為需要的請求方式(大小寫都可以)
+					4. 原来是springboot2.2.x后默认不支持put、delete请求，需在配置文件里手动配置：
+						spring.mvc.hiddenmethod.filter.enabled=true
+						WebMvcAutoConfiguration.class有提到
+					-->
+					<input type="hidden" name="_method" value="put" th:if="${emp!=null}"></input>
+					<input type="hidden" name="id" th:value="${emp!=null}?${emp.id}" th:if="${emp!=null}"></input>
+					<div class="form-group">
+						<label for="lastName">Last Name</label>
+						<input type="text" class="form-control" id="lastName" name="lastName" th:value="${emp!=null}?${emp.lastName}">
+					</div>
+					<div class="form-group">
+						<label for="email">Email address</label>
+						<input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" th:value="${emp!=null}?${emp.email}">
+					</div>
+					<div class="form-group">
+						<label>Sex</label>
+						<div class="col-sm-10">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="gender" id="gender1" value="0" th:checked="${emp!=null}?${emp.gender==0}">
+								<label class="form-check-label" for="gender1">男</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="gender" id="gender2" value="1" th:checked="${emp!=null}?${emp.gender==1}">
+								<label class="form-check-label" for="gender2">女</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="birth">Birth</label>
+						<input type="text" class="form-control" id="birth" name="birth" placeholder="2019-01-01" th:value="${emp!=null}?${emp.birth}">
+					</div>
+					<div class="form-group">
+						<label for="department">Department select</label>
+						<select class="form-control" id="department" name="department.id">
+							<option th:selected="${emp!=null}?${emp.department.id==dept.id}" th:each="dept, deptStat: ${depts}" th:text="${dept.deptName}" th:value="${dept.id}"></option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn-primary" th:text="${emp!=null}?'Update':'Add'"></button>
+				</form>
+			</main>
+		</div>
+	</div>
+	
+	<div th:replace="~{fragments/footer::footer('')}"></div>
+</body>
+</html>

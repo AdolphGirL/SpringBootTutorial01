@@ -1,0 +1,74 @@
+# 主配置文件，以application-{profile}.properties/yml
+# -{profile}，來區隔；其中profile可以填上任意識別字母
+# 在沒指定的情況下，默認會讀取application.properties/yml
+# 指定方式spring.profiles.active=dev
+# yml有個特別方式，在同一份文件內可以配置多種情況，使用---區隔開即可
+# spring boot文件加載路徑，在resources下
+# - file:/config/         寫法等同於classpath寫法，但是是相對於專案結構非classpath；由上往下，若上方有配置的內容，下方有出現，則以上方為主
+# - file:/
+# - classpath:/config/
+# - classpath:
+spring:
+  profiles:
+    active:
+    - dev
+  # thymeleaf配置
+  # 不配置的話，預設也為如此
+  thymeleaf:
+    enabled: true
+    encoding: UTF-8
+    mode: LEGACYHTML5
+    prefix: classpath:/templates/
+    suffix: .html
+#    留意cache
+    cache: false
+  messages:
+    basename: i18n.login
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+server:
+  servlet:
+    context-path: /app
+
+# 當其餘配置模塊內容沒有的部分，會自動延續下去；端看其所在位置，如果在模組dev內，則主模組會看不到
+propertiesbean:
+  name: Reyes
+  age: 18
+  weight: 123.05
+  isP: true
+  bir: 2019/01/02
+  maps: {k1: v1, k2: v2}
+  lists:
+    - A
+    - B
+    - C
+# 行內寫法 lists: [A, B, C]
+  dtl:
+#  yml編碼已為utf-8，因此中字有支援
+    name: 陳
+    age: 4756
+    
+vb:
+# 可以使用${}取值，如果不存在也可以指定默認值，使用:
+  name: ${propertiesbean.name:aaa}
+    
+---
+
+spring:
+  profiles:
+  - dev
+
+server:
+  port: 9090
+  
+---
+
+spring:
+  profiles:
+  - prod
+
+server:
+  port: 8080
